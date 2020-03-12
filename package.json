@@ -1,0 +1,28 @@
+{
+  "name": "aviasales",
+  "version": "1.0.0",
+  "description": "test task for aviasales. responsive form for widget",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "islamov er",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^9.7.4",
+    "awesome-typescript-loader": "^5.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss": "^7.0.26",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^1.1.3",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "dependencies": {
+    "lit-html": "^1.1.2"
+  }
+}
