@@ -1,3 +1,4 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -14,7 +15,16 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ['style-loader', 'postcss-loader'],
+                use: [
+                    { loader: 'style-loader' },
+                    // {
+                    //   loader: 'css-loader',
+                    //   options: {
+                    //     modules: true,
+                    //   },
+                    // },
+                    { loader: 'postcss-loader' }
+                ]
             },
             {
                 test: /\.tsx?$/,
@@ -25,7 +35,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html'
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ],
     devServer: {
         port: 3000

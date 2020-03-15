@@ -1,0 +1,107 @@
+.aviasalesWidget{
+	min-width: 200px;
+  	max-width: 1024px;
+  	color: #fff;
+  	background-color: #4a90e2;
+  	padding: 7px;
+  	font-family: Helvetica;
+}
+
+
+
+/*  $WidgetHeader
+  	margin: 5px 14px 0 14px;
+
+
+.aviasalesWidgetHeader>*{
+  display: inline-block;
+  margin: 0;
+}
+
+
+.aviasalesWidgetFlexContentFirst{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.aviasalesWidgetFlexContentSecond{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.aviasalesWidgetFlexContentSecond{
+  flex-basis: 550px;
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+
+
+.aviasalesWidgetDescription{
+  font-size: 10px;
+  margin: 10px 14px;
+  box-sizing: border-box;
+  flex-basis: 205px;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+
+.aviasalesWidgetFlexContentSecond>*{
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 50px;
+}
+
+
+.aviasalesWidgetButton{
+  padding: 0;
+  margin:  7px 14px;
+  height:41px;
+  border: none;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 140px;
+}
+
+.aviasalesWidgetButton button{
+  background-color: #f5a523;
+  border-radius: 3px;
+  color: inherit;
+  height: 100%;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.aviasalesWidgetDateInput{
+  height: 41px;
+  margin: 7px 14px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 110px;
+  font-style: inherit;
+  position: relative;
+}
+
+.aviasalesWidgetDateInput input{
+  border-radius: 3px;
+  border: none;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  padding: 0 15px;
+  min-width: 0;
+  font-style: inherit;
+}
+
+.aviasalesWidgetDateInput svg{
+	position: absolute;
+	right: 10px;
+	top: 12px;
+}
+
+.aviasalesWidgetDescriptionOrderBotttom{
+  order: 2;
+  margin-top: 5px;
+}*/

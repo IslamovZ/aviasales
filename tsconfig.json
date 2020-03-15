@@ -7,5 +7,6 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "target": "es5",
+    "resolveJsonModule": true
   },
 }
