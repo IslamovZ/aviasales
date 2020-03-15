@@ -4,8 +4,8 @@ import {styleMap} from 'lit-html/directives/style-map.js';
 import {dateInputMask, throttleWrapper} from './Utils'
 import calendar from './components/Calendar'
 import './index.css'
-import * as styles from './index.css.json'
-import {Languages} from './localization'
+import * as styles from './index.json'
+import getText, {Languages, Dictionary} from './localization'
 
 interface ICustomTheme {
 	backgroundColor?: string,
@@ -21,14 +21,15 @@ interface IRenderAviasalesWidget {
 	widgetElement:HTMLElement;
 	descriptionElement:HTMLElement;
     customTheme:ICustomTheme
-    local:Languages
+    local: Languages
 	init: () => void;
 	addDescriptionListener: (func:() => void) => void;
 	inputResizeHandler: () => void;
 	getTemplate: (props:ICustomTheme) => any;
 }
 
-class renderAviasalesWidget implements IRenderAviasalesWidget{
+//@ts-ignore
+window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAviasalesWidget{
     widgetElement:HTMLElement
     descriptionElement:HTMLElement
 
@@ -41,10 +42,14 @@ class renderAviasalesWidget implements IRenderAviasalesWidget{
 			throw new Error('Не найден элемент для виджета');
 		}
 
-		const {backgroundColor, buttonColor, textColor, local=Languages.en} = props || {};
+		const {backgroundColor, buttonColor, textColor, local} = props || {};
 		this.customTheme = {backgroundColor, buttonColor, textColor};
-		this.local = local;
+		//@ts-ignore
+		if (local && !Object.values(Languages).includes(local)) {
+			throw new Error('Не найден словарь для данного языка');
+		}
 
+		this.local = local || Languages.en;
     }
 
   	init = () => {
@@ -65,9 +70,9 @@ class renderAviasalesWidget implements IRenderAviasalesWidget{
 
 	inputResizeHandler = () => {
 		if(this.widgetElement.offsetWidth < 290){
-			this.descriptionElement.className = "aviasales-widget__description aviasales-widget__description_order-both"; 
+			this.descriptionElement.className = `${styles.description} ${styles.descriptionOrderBotttom}`; 
 		} else {
-	  		this.descriptionElement.className = "aviasales-widget__description"; 
+	  		this.descriptionElement.className = styles.description; 
 		}
 	}
 
@@ -78,42 +83,40 @@ class renderAviasalesWidget implements IRenderAviasalesWidget{
 		const calendarHtml = calendar(backgroundColor);
 
 		return html`<div id="aviasales-widget" class="${styles.aviasalesWidget}"  style=${styleMap(widgetStyle)}>
-		  <div class="aviasales-widget__header">
-		      <p>Where does it come from? </p> 
-		      <p>Why do we use it?</p>
-		  </div>
-		  <div class="aviasales-widget__flex-content-first">
+		  	<div class="${styles.header}">
+		      	<p>${getText(this.local, Dictionary.headerFirst)}</p> 
+		      	<p>${getText(this.local, Dictionary.headerSecond)}</p>
+		  	</div>
+		  	<div class="${styles.flexContentFirst}">
 
-		      <div id="aviasales-widget__description">
-		        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-		      </div>
+		      	<div id="aviasales-widget__description" class="${styles.description}">
+		      		<p>${getText(this.local, Dictionary.description)}</p>
+		      	</div>
 		      
 		    
-		      <form class="aviasales-widget__flex-content-second">
-			      	<div class="aviasales-widget__date-input">
-			          <input  placeholder="Depart date">
-			          ${calendarHtml}
+		      	<form class="${styles.flexContentSecond}">
+			      	<div class="${styles.dateInput}">
+			          	<input  placeholder="${getText(this.local, Dictionary.inputPlaceholderFirst)}">
+			          	${calendarHtml}
 			      	</div>
-			      	<div class="aviasales-widget__date-input">
-			          <input placeholder="Return date">
-			          ${calendarHtml}
+			      	<div class="${styles.dateInput}">
+			          	<input placeholder="${getText(this.local, Dictionary.inputPlaceholderSecond)}">
+			          	${calendarHtml}
 			      	</div>
-			      	<div class="aviasales-widget__button">
+			      	<div class="${styles.button}">
 				        <button style=${styleMap(buttonColor ? {buttonColor} : {})}>
-				        	search
+				        	${getText(this.local, Dictionary.button)}
 				        </button>
 				    </div>
 				</form>
-
-		  </div>
-		</div>
-		`;	
+		  	</div>
+		</div>`;	
 	}
 }
 
 
 
 
-// let t = new renderAviasalesWidget('aviasales', {backgroundColor:'#222', textColor:'blue'});
-let t = new renderAviasalesWidget('aviasales');
-t.init();
+// let t = new renderAviasalesWidget('aviasales', {local: Languages.ru});
+// let t = new renderAviasalesWidget('aviasales');
+// t.init();
