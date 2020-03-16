@@ -10,8 +10,8 @@ module.exports = {
 		  		var dtsContent = Object.keys(json).map(className => `export const ${className}: string;`).join('\n');
 				var path = require("path");
 				var cssName = path.basename(cssFileName, ".css");
-				var jsonFileName = path.resolve("./src/" + cssName + ".json");
-				var dtsFileName = path.resolve("./src/" + cssName + ".json.d.ts");
+				var jsonFileName = path.resolve("./src/style/" + cssName + ".json");
+				var dtsFileName = path.resolve("./src/style/" + cssName + ".json.d.ts");
 				await fs.writeFileSync(jsonFileName, JSON.stringify(json));
 				await fs.writeFileSync(dtsFileName, dtsContent);
 	  	    }

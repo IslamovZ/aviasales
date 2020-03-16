@@ -8,8 +8,9 @@
     <div id="aviasales"></div>
 	<script type="text/javascript" src="http://localhost:5000/bundle.js"></script>
 	<script type="text/javascript">
-		var test = new renderAviasalesWidget('aviasales');
-		test.init();
+		var test = new renderAviasalesWidget;
+		test.init('aviasales');
+		// test.init('aviasales', {local: 'ru', backgroundColor='#fff', buttonColor='blue', textColor='orange'})
 	</script>
 </body>
 </html>

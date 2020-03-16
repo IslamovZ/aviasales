@@ -1,4 +1,4 @@
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
         ]
     },
     plugins: [
-        // new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin()
     ],
     devServer: {
         port: 5000,

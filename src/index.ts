@@ -3,8 +3,8 @@ import {styleMap} from 'lit-html/directives/style-map.js';
 
 import {dateInputMask, throttleWrapper} from './utils'
 import calendar from './components/Calendar'
-import './index.css'
-import * as styles from './index.json'
+import './style/index.css'
+import * as styles from './style/index.json'
 import getText, {Languages, Dictionary} from './localization'
 
 interface ICustomTheme {
@@ -21,19 +21,20 @@ interface IRenderAviasalesWidget {
 	widgetElement:HTMLElement;
     customTheme:ICustomTheme
     local: Languages
-	init: () => void;
+	init: (name:string, props?:ICustomTheme & ILocalization) => void;
 	addDescriptionListener: (func:() => void) => void;
 	inputResizeHandler: () => void;
 	getTemplate: (props:ICustomTheme) => any;
 }
 
-class renderAviasalesWidget implements IRenderAviasalesWidget{
+//@ts-ignore
+window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAviasalesWidget{
     widgetElement:HTMLElement
 
     customTheme:ICustomTheme
     local:Languages
 
-	constructor(name:string, props?:ICustomTheme & ILocalization) {
+  	init = (name:string, props?:ICustomTheme & ILocalization) => {
 		this.widgetElement = document.getElementById(name);
 		if(!this.widgetElement){
 			throw new Error('Не найден элемент для виджета');
@@ -47,9 +48,6 @@ class renderAviasalesWidget implements IRenderAviasalesWidget{
 		}
 
 		this.local = local || Languages.en;
-    }
-
-  	init = () => {
 		render(this.getTemplate(), this.widgetElement);	
 
 		const inputs = this.widgetElement.querySelectorAll('input');
@@ -113,3 +111,10 @@ class renderAviasalesWidget implements IRenderAviasalesWidget{
 		</div>`;	
 	}
 }
+
+
+
+
+// var test = new renderAviasalesWidget('aviasales');
+
+// test.init();
