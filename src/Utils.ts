@@ -1,21 +1,18 @@
+export const dateInputMask = (e : KeyboardEvent, element:HTMLInputElement) => {
+    let len = element.value.length;
+    if(e.keyCode < 47 || e.keyCode > 57 || len>9) {
+        e.preventDefault();
+    }
 
-export const dateInputMask = (elm : HTMLInputElement) : void  => {
-	elm.addEventListener('keypress', function(e : KeyboardEvent) {
-	    let len = elm.value.length;
-	    if(e.keyCode < 47 || e.keyCode > 57 || len>9) {
-	      	e.preventDefault();
-	    }
-
-	    if(e.keyCode == 190 && len !== 1 && len !== 3) {
-	        e.preventDefault();
-	    }
-	    if(len === 2) {
-      		elm.value += '.';
-	    }
-	    if(len === 5) {
-      		elm.value += '.';
-	    }
-	});
+    if(e.keyCode == 190 && len !== 1 && len !== 3) {
+        e.preventDefault();
+    }
+    if(len === 2) {
+        element.value += '.';
+    }
+    if(len === 5) {
+        element.value += '.';
+    }
 };
 
 

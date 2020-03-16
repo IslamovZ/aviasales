@@ -4,7 +4,7 @@ module.exports = {
     plugins: [
         require('autoprefixer'),
         require('postcss-modules')({
-		  	generateScopedName: "[name]__[local]___[hash:base64:5]",
+		  	generateScopedName: process.env.NODE_ENV === 'production' ? "[hash:base64:7]" : "[name]__[local]___[hash:base64:5]",
 		  	getJSON: async function(cssFileName, json, outputFileName) {
 		  		//сделал чтобы сразу формировался d.ts файл для стилей
 		  		var dtsContent = Object.keys(json).map(className => `export const ${className}: string;`).join('\n');
@@ -18,3 +18,4 @@ module.exports = {
 	  	})
     ]
 }
+

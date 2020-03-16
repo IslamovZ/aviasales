@@ -1,7 +1,7 @@
 import {html, render} from 'lit-html';
 import {styleMap} from 'lit-html/directives/style-map.js';
 
-import {dateInputMask, throttleWrapper} from './Utils'
+import {dateInputMask, throttleWrapper} from './utils'
 import calendar from './components/Calendar'
 import './index.css'
 import * as styles from './index.json'
@@ -19,7 +19,6 @@ export interface ILocalization{
 
 interface IRenderAviasalesWidget {
 	widgetElement:HTMLElement;
-	descriptionElement:HTMLElement;
     customTheme:ICustomTheme
     local: Languages
 	init: () => void;
@@ -28,10 +27,8 @@ interface IRenderAviasalesWidget {
 	getTemplate: (props:ICustomTheme) => any;
 }
 
-//@ts-ignore
-window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAviasalesWidget{
+class renderAviasalesWidget implements IRenderAviasalesWidget{
     widgetElement:HTMLElement
-    descriptionElement:HTMLElement
 
     customTheme:ICustomTheme
     local:Languages
@@ -54,9 +51,9 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 
   	init = () => {
 		render(this.getTemplate(), this.widgetElement);	
-		this.descriptionElement = document.getElementById("aviasales-widget__description");
-		const inputs = document.querySelectorAll('input');
-		inputs.forEach(input => dateInputMask(input));
+
+		const inputs = this.widgetElement.querySelectorAll('input');
+		inputs.forEach(input => input.addEventListener('keypress', e => dateInputMask(e, input)));
 
 		this.addDescriptionListener(this.inputResizeHandler);
 		this.inputResizeHandler();
@@ -69,11 +66,14 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 	}
 
 	inputResizeHandler = () => {
-		if(this.widgetElement.offsetWidth < 290){
-			this.descriptionElement.className = `${styles.description} ${styles.descriptionOrderBotttom}`; 
-		} else {
-	  		this.descriptionElement.className = styles.description; 
-		}
+		const classList = this.widgetElement.classList;
+		const width = this.widgetElement.offsetWidth;
+
+		if(width < 290 && !classList.contains(styles.aviasalesWidgetSmall)){
+			classList.add(styles.aviasalesWidgetSmall); 
+		} else if (width >= 290 && classList.contains(styles.aviasalesWidgetSmall)){
+    		classList.remove(styles.aviasalesWidgetSmall);
+  		}
 	}
 
 
@@ -82,19 +82,19 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 		const widgetStyle = backgroundColor || textColor ? {backgroundColor, color: textColor} : {};
 		const calendarHtml = calendar(backgroundColor);
 
-		return html`<div id="aviasales-widget" class="${styles.aviasalesWidget}"  style=${styleMap(widgetStyle)}>
+		return html`<div id="aviasales-widget" style=${styleMap(widgetStyle)}>
 		  	<div class="${styles.header}">
 		      	<p>${getText(this.local, Dictionary.headerFirst)}</p> 
 		      	<p>${getText(this.local, Dictionary.headerSecond)}</p>
 		  	</div>
-		  	<div class="${styles.flexContentFirst}">
+		  	<div class="${styles.content}">
 
-		      	<div id="aviasales-widget__description" class="${styles.description}">
+		      	<div class="${styles.description}">
 		      		<p>${getText(this.local, Dictionary.description)}</p>
 		      	</div>
 		      
 		    
-		      	<form class="${styles.flexContentSecond}">
+		      	<form class="${styles.form}">
 			      	<div class="${styles.dateInput}">
 			          	<input  placeholder="${getText(this.local, Dictionary.inputPlaceholderFirst)}">
 			          	${calendarHtml}
@@ -113,10 +113,3 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 		</div>`;	
 	}
 }
-
-
-
-
-// let t = new renderAviasalesWidget('aviasales', {local: Languages.ru});
-// let t = new renderAviasalesWidget('aviasales');
-// t.init();
