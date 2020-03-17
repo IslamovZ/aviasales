@@ -75,19 +75,24 @@
 	flex: 1 1 110px;
 	font-style: inherit;
 	position: relative;
+	background: #fff;
 }
 
 .dateInput input{
 	box-sizing: border-box;
-	padding: 0 15px;
+	padding: 5px 10px;
 	min-width: 0;
 	font-style: inherit;
+	z-index: 1;
+	position: relative;
+	background: transparent;
 }
 
 .dateInput svg{
 	position: absolute;
 	right: 10px;
 	top: 12px;
+	z-index: 0;
 }
 
 

@@ -1,14 +1,15 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require("path");
 
 module.exports = {
+    mode: process.env.NODE_ENV,
     entry: './src/index.ts',
     resolve: {
         extensions: ['.ts', '.js']
     },
 
     output: {
-        path: __dirname + '/dist',
+        path: path.join(__dirname, "/dist"),
         filename: 'bundle.js'
     },
     module: {
@@ -27,21 +28,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new BundleAnalyzerPlugin()
+        // new BundleAnalyzerPlugin()
     ],
     devServer: {
-        port: 5000,
+        port: 3000,
         hot: true
-    },
-
-    optimization: {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                terserOptions: {
-                    keep_classnames: true,
-                },
-            }),
-        ],
     },
 };

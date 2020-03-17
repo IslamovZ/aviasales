@@ -13,6 +13,11 @@ interface ICustomTheme {
 	textColor?: string,
 }
 
+interface IValues {
+	startDate?: Date,
+	endDate?: Date,
+}
+
 export interface ILocalization{
 	local?: Languages
 }
@@ -20,50 +25,59 @@ export interface ILocalization{
 interface IRenderAviasalesWidget {
 	widgetElement:HTMLElement;
     customTheme:ICustomTheme
-    local: Languages
-	init: (name:string, props?:ICustomTheme & ILocalization) => void;
+	local: Languages
+	values: IValues
+	constructor: (name: string) => void
+	init: (props?:ICustomTheme & ILocalization) => void;
 	addDescriptionListener: (func:() => void) => void;
 	inputResizeHandler: () => void;
 	getTemplate: (props:ICustomTheme) => any;
 }
 
 //@ts-ignore
-window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAviasalesWidget{
-    widgetElement:HTMLElement
-
+class renderAviasalesWidget implements IRenderAviasalesWidget{
+	widgetElement:HTMLElement
     customTheme:ICustomTheme
-    local:Languages
-
-  	init = (name:string, props?:ICustomTheme & ILocalization) => {
+	local:Languages
+	values:IValues
+	
+	constructor(name:string) {
 		this.widgetElement = document.getElementById(name);
 		if(!this.widgetElement){
 			throw new Error('Не найден элемент для виджета');
 		}
 
-		const {backgroundColor, buttonColor, textColor, local} = props || {};
-		this.customTheme = {backgroundColor, buttonColor, textColor};
+		this.customTheme={};
+		this.local=Languages.en;
+		this.values={}
+
+		this.addResizeListener();
+	}
+
+
+  	init = (props?:ICustomTheme & ILocalization) => {
+		const {local, ...theme} = props || {};
+		if (Object.keys(theme).length !== 0) {
+			this.customTheme = theme;
+		}
 		//@ts-ignore
 		if (local && !Object.values(Languages).includes(local)) {
 			throw new Error('Не найден словарь для данного языка');
 		}
 
-		this.local = local || Languages.en;
+		this.local = local || this.local;
+
 		render(this.getTemplate(), this.widgetElement);	
-
-		const inputs = this.widgetElement.querySelectorAll('input');
-		inputs.forEach(input => input.addEventListener('keypress', e => dateInputMask(e, input)));
-
-		this.addDescriptionListener(this.inputResizeHandler);
-		this.inputResizeHandler();
 	}
 
 
-	addDescriptionListener = (func:() => void) => {
-  		const throttleResizeHandler = throttleWrapper<()=>void>(this.inputResizeHandler, 100);
+	addResizeListener = () => {
+		this.containerResizeHandler()
+  		const throttleResizeHandler = throttleWrapper<()=>void>(this.containerResizeHandler, 100);
   		window.addEventListener("resize", throttleResizeHandler, false);
 	}
 
-	inputResizeHandler = () => {
+	containerResizeHandler = () => {
 		const classList = this.widgetElement.classList;
 		const width = this.widgetElement.offsetWidth;
 
@@ -72,6 +86,29 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 		} else if (width >= 290 && classList.contains(styles.aviasalesWidgetSmall)){
     		classList.remove(styles.aviasalesWidgetSmall);
   		}
+	}
+
+
+	setValue=(e: Event)=>{
+		//@ts-ignore
+		const {name, valueAsDate} = e.target;
+		//@ts-ignore
+		this.values[name]=valueAsDate;
+	}
+
+	handleSubmit=(e: Event)=>{
+		e.preventDefault();
+		const { startDate, endDate } = this.values;
+		if ( !this.validate() ) {
+			alert ('Wrong values')
+		} else {
+			alert(`Submit from ${startDate.toDateString()} to ${endDate.toDateString()}`)
+		}
+	}
+
+	validate=()=>{
+		const { startDate, endDate } = this.values;
+		return endDate>=startDate
 	}
 
 
@@ -92,17 +129,29 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 		      	</div>
 		      
 		    
-		      	<form class="${styles.form}">
+		      	<form class="${styles.form}" @submit=${this.handleSubmit}>
 			      	<div class="${styles.dateInput}">
-			          	<input  placeholder="${getText(this.local, Dictionary.inputPlaceholderFirst)}">
+						<input  
+						  	placeholder="${getText(this.local, Dictionary.inputPlaceholderFirst)}"
+							name='startDate'
+							type='date'
+							@change=${this.setValue} 
+							@keypress=${dateInputMask} 
+						>
 			          	${calendarHtml}
 			      	</div>
 			      	<div class="${styles.dateInput}">
-			          	<input placeholder="${getText(this.local, Dictionary.inputPlaceholderSecond)}">
+						<input 
+							placeholder="${getText(this.local, Dictionary.inputPlaceholderSecond)}"
+							name='endDate'
+							type='date'
+							@change=${this.setValue}  
+							@keypress=${dateInputMask} 
+						>
 			          	${calendarHtml}
 			      	</div>
 			      	<div class="${styles.button}">
-				        <button style=${styleMap(buttonColor ? {buttonColor} : {})}>
+				        <button type='submit' style=${styleMap(buttonColor ? {buttonColor} : {})}>
 				        	${getText(this.local, Dictionary.button)}
 				        </button>
 				    </div>
@@ -112,9 +161,5 @@ window.renderAviasalesWidget = class renderAviasalesWidget implements IRenderAvi
 	}
 }
 
-
-
-
-// var test = new renderAviasalesWidget('aviasales');
-
-// test.init();
+//@ts-ignore
+window.AviasalesInformer=renderAviasalesWidget;

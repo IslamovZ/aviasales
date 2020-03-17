@@ -1,5 +1,8 @@
-export const dateInputMask = (e : KeyboardEvent, element:HTMLInputElement) => {
-    let len = element.value.length;
+export const dateInputMask = (e : KeyboardEvent) => {
+	const element=e.target;
+
+	//@ts-ignore
+    const len = element.value.length;
     if(e.keyCode < 47 || e.keyCode > 57 || len>9) {
         e.preventDefault();
     }
@@ -8,9 +11,11 @@ export const dateInputMask = (e : KeyboardEvent, element:HTMLInputElement) => {
         e.preventDefault();
     }
     if(len === 2) {
+		//@ts-ignore
         element.value += '.';
     }
     if(len === 5) {
+		//@ts-ignore
         element.value += '.';
     }
 };

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>Aviasales Example</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class='description'>
+		<h2>This is demo page that served on //localhost:3000</h2> 
+		<h4>It takes the widget bundle <b>(only ~9 kB transfered)</b> from another server <b>(//localhost:5000)</b>, and shows how can it be used</h4>
+		<hr>
+		
+		<div class='desc-item'>
+			<h5>Locale</h5>
+			<button onclick="widget.init({local: 'en'})">en</button>
+			<button onclick="widget.init({local: 'ru'})">ru</button>
+		</div>
+
+		<div class='desc-item'>
+			<h5>Theme colors</h5>
+			<button onclick="widget.init({backgroundColor: undefined})">default</button>
+			<button onclick="widget.init({backgroundColor: '#444', buttonColor: 'blue', textColor: 'orange'})">dark</button>
+		</div>
+	</div>
+
+	
+
+    <div id="aviasales"></div>
+	<script type="text/javascript" src="http://localhost:5000/bundle.js"></script>
+	<script type="text/javascript">
+		const widget=new AviasalesInformer('aviasales');
+		widget.init()
+	</script>
+</body>
+</html>
