@@ -1,6 +1,6 @@
 # aviasales
 
-To lounch the packege, do following:
+To launch the package, do following:
 
 ```
 git clone https://github.com/IslamovZ/aviasales.git
